@@ -34,10 +34,10 @@ jobs:
     - name: Install dependencies
       run: make deps
 
-    - name: Run security check
-      run: |
-        go install github.com/securecodewarrior/gosec/v2/cmd/gosec@latest
-        make sec
+    - name: Run Gosec Security Scanner
+      uses: securego/gosec@master
+      with:
+        args: ./...
 
     - name: Format check
       run: |
