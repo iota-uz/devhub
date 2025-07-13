@@ -2,6 +2,8 @@
 
 DevHub is a development environment orchestrator that manages all your development services from a single, beautiful terminal interface. It provides an intuitive TUI (Terminal User Interface) to start, stop, monitor, and debug your development stack including databases, web servers, build processes, and more.
 
+![DevHub Screenshot](images/devhub-screenshot.png)
+
 ## Features
 
 - 🚀 **Service Orchestration**: Manage multiple development services with dependency resolution
