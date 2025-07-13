@@ -10,6 +10,6 @@ func setSysProcAttr(attr *syscall.SysProcAttr) {
 	attr.Setpgid = true
 }
 
-func killProcessGroup(pid int) error {
-	return syscall.Kill(-pid, syscall.SIGKILL)
+func killProcessGroup(pid int32) error {
+	return syscall.Kill(-int(pid), syscall.SIGKILL)
 }

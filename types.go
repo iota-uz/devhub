@@ -15,7 +15,7 @@ type ServiceInfo struct {
 	Port         string
 	LastUpdate   time.Time
 	ErrorMsg     string
-	PID          int
+	PID          int32
 	StartTime    *time.Time
 	CPUPercent   float64
 	MemoryMB     float64

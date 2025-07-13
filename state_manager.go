@@ -46,7 +46,7 @@ type ResourceUpdate struct {
 	ServiceName string
 	CPUPercent  float64
 	MemoryMB    float64
-	PID         int
+	PID         int32
 }
 
 func NewStateManager(serviceManager *ServiceManager) *StateManager {

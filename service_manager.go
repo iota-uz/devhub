@@ -205,7 +205,7 @@ func (l *FileConfigLoader) Load() (*Config, error) {
 }
 
 func loadConfig(path string) (*Config, error) {
-	data, err := os.ReadFile(path)
+	data, err := os.ReadFile(path) // #nosec G304 -- Intentional config file reading from user-specified path
 	if err != nil {
 		return nil, err
 	}
@@ -295,7 +295,7 @@ func (sm *ServiceManager) GetServices() []ServiceInfo {
 
 		// Get resource usage and other metadata if available
 		var cpuPercent, memoryMB float64
-		var pid int
+		var pid int32
 		var startTime *time.Time
 		var dependsOn []string
 		healthStatus := service.GetHealthStatus()
@@ -344,7 +344,7 @@ func (sm *ServiceManager) GetServicesBasic() []ServiceInfo {
 			errorMsg = err.Error()
 		}
 
-		var pid int
+		var pid int32
 		var startTime *time.Time
 		var dependsOn []string
 		healthStatus := service.GetHealthStatus()

@@ -91,7 +91,7 @@ type BaseService struct {
 	cancelFunc    context.CancelFunc
 	logBuffer     *CircularLogBuffer
 	startTime     *time.Time
-	pid           int
+	pid           int32
 	healthMonitor *HealthMonitor
 	healthStatus  HealthStatus
 }
@@ -149,7 +149,7 @@ func (s *BaseService) GetError() error {
 	return s.lastError
 }
 
-func (s *BaseService) GetPID() int {
+func (s *BaseService) GetPID() int32 {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 	return s.pid
@@ -261,7 +261,7 @@ func (s *BaseService) runCommand(ctx context.Context, command string, args ...st
 		fmt.Fprintf(os.Stderr, "Failed to write to log buffer: %v\n", err)
 	}
 
-	s.cmd = exec.CommandContext(cmdCtx, cmdPath, args...)
+	s.cmd = exec.CommandContext(cmdCtx, cmdPath, args...) // #nosec G204 -- Intentional command execution from user config
 
 	// Set working directory
 	wd, _ := os.Getwd()
@@ -292,7 +292,7 @@ func (s *BaseService) runCommand(ctx context.Context, command string, args ...st
 
 	// Track PID and start time
 	s.mu.Lock()
-	s.pid = s.cmd.Process.Pid
+	s.pid = int32(s.cmd.Process.Pid) // #nosec G115 -- Process PID conversion from OS int to int32
 	now := time.Now()
 	s.startTime = &now
 	s.mu.Unlock()

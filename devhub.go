@@ -2,6 +2,8 @@ package devhub
 
 import (
 	"context"
+	"fmt"
+	"os"
 
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
@@ -73,7 +75,10 @@ func (m *Model) Run(ctx context.Context) error {
 		<-runCtx.Done()
 		m.StateManager.Stop()
 		m.ServiceManager.Shutdown()
-		m.MCPServer.Stop()
+		if err := m.MCPServer.Stop(); err != nil {
+			// Log error but don't fail shutdown
+			fmt.Fprintf(os.Stderr, "Error stopping MCP server: %v\n", err)
+		}
 	}()
 
 	p := tea.NewProgram(*m, tea.WithAltScreen())
@@ -84,6 +89,9 @@ func (m *Model) Run(ctx context.Context) error {
 
 	m.StateManager.Stop()
 	m.ServiceManager.Shutdown()
-	m.MCPServer.Stop()
+	if err := m.MCPServer.Stop(); err != nil {
+		// Log error but don't fail shutdown
+		fmt.Fprintf(os.Stderr, "Error stopping MCP server: %v\n", err)
+	}
 	return nil
 }

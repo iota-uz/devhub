@@ -11,13 +11,13 @@ type ResourceUsage struct {
 }
 
 // GetProcessResourceUsage returns CPU and memory usage for a given PID
-func GetProcessResourceUsage(pid int) (*ResourceUsage, error) {
+func GetProcessResourceUsage(pid int32) (*ResourceUsage, error) {
 	if pid <= 0 {
 		return &ResourceUsage{}, nil
 	}
 
 	// Create process instance
-	proc, err := process.NewProcess(int32(pid))
+	proc, err := process.NewProcess(pid)
 	if err != nil {
 		// Process might not exist
 		return &ResourceUsage{}, err
@@ -48,13 +48,13 @@ func GetProcessResourceUsage(pid int) (*ResourceUsage, error) {
 }
 
 // GetProcessTree returns all child PIDs for a given parent PID
-func GetProcessTree(parentPID int) ([]int, error) {
+func GetProcessTree(parentPID int32) ([]int32, error) {
 	if parentPID <= 0 {
 		return nil, nil
 	}
 
 	// Create process instance
-	proc, err := process.NewProcess(int32(parentPID))
+	proc, err := process.NewProcess(parentPID)
 	if err != nil {
 		return nil, err
 	}
@@ -65,16 +65,16 @@ func GetProcessTree(parentPID int) ([]int, error) {
 		return nil, err
 	}
 
-	pids := make([]int, 0, len(children))
+	pids := make([]int32, 0, len(children))
 	for _, child := range children {
-		pids = append(pids, int(child.Pid))
+		pids = append(pids, child.Pid)
 	}
 
 	return pids, nil
 }
 
 // GetTotalResourceUsage returns combined resource usage for a process and all its children
-func GetTotalResourceUsage(pid int) (*ResourceUsage, error) {
+func GetTotalResourceUsage(pid int32) (*ResourceUsage, error) {
 	if pid <= 0 {
 		return &ResourceUsage{}, nil
 	}

@@ -123,7 +123,7 @@ func (c *CommandHealthCheck) Check(ctx context.Context) error {
 	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	cmd := exec.CommandContext(ctx, c.Command[0], c.Command[1:]...)
+	cmd := exec.CommandContext(ctx, c.Command[0], c.Command[1:]...) // #nosec G204 -- Intentional command execution for health checks
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("command health check failed: %w", err)
 	}
