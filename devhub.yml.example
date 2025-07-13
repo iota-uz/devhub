@@ -1,0 +1,65 @@
+# DevHub Configuration Example
+# Copy this file to devhub.yml and customize for your project
+
+# Database service
+postgres:
+  desc: PostgreSQL database
+  port: 5432
+  run: docker compose up postgres
+  health:
+    tcp: 5432
+    wait: 20s
+    interval: 5s
+    timeout: 3s
+
+# Web server with dependency on database
+server:
+  desc: Development web server
+  port: 3000
+  run: npm run dev
+  needs: [postgres]
+  health:
+    http: http://localhost:3000/health
+    wait: 10s
+    interval: 5s
+    timeout: 3s
+  os:
+    windows: npm.cmd run dev
+
+# Build tools (no port, no health check needed)
+build:
+  desc: Asset build watcher
+  run: npm run build:watch
+
+# Template compiler
+templates:
+  desc: Template compiler
+  run: templ generate --watch
+  os:
+    windows: templ.exe generate --watch
+
+# CSS processor
+css:
+  desc: Tailwind CSS processor
+  run: tailwindcss -i input.css -o output.css --watch
+  os:
+    windows: tailwindcss.exe -i input.css -o output.css --watch
+
+# Background worker
+worker:
+  desc: Background job processor
+  run: go run ./cmd/worker
+  needs: [postgres]
+  health:
+    cmd: "curl -f http://localhost:8080/worker/health"
+    wait: 15s
+    interval: 10s
+    timeout: 5s
+
+# External tunnel (depends on server)
+tunnel:
+  desc: Cloudflare tunnel
+  run: cloudflared tunnel --url http://localhost:3000
+  needs: [server]
+  os:
+    windows: cloudflared.exe tunnel --url http://localhost:3000
