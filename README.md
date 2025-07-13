@@ -14,15 +14,9 @@ DevHub is a development environment orchestrator that manages all your developme
 
 ## Installation
 
-### From Source
-
 ```bash
 go install github.com/iota-uz/devhub/cmd/devhub@latest
 ```
-
-### From Releases
-
-Download the latest binary from the [releases page](https://github.com/iota-uz/devhub/releases).
 
 ## Quick Start
 

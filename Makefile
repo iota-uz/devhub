@@ -75,9 +75,6 @@ check: fmt vet lint test
 docker:
 	docker build -t devhub:$(VERSION) .
 
-# Release (requires goreleaser)
-release:
-	goreleaser release --clean
 
 # Development dependencies
 dev-deps:
